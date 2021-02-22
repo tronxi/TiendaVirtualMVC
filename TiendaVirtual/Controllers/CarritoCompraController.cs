@@ -18,10 +18,29 @@ namespace TiendaVirtual.Controllers
         // GET: CarritoCompra
         public ActionResult Index(CarritoCompra cc)
         {
-            Dictionary<int, int> typeIdAmount = new Dictionary<int, int>();
-            for(int i = 0; i < cc.ToList().Count; i++)
+            return View(toShow(cc));
+        }
+
+        public ActionResult comprar(CarritoCompra cc)
+        {
+            CarritoCompra carritoToShow = toShow(cc);
+            Pedido pedido = new Pedido();
+            pedido.Nombre = User.Identity.Name;
+            for (int i = 0; i < carritoToShow.ToList().Count; i++)
             {
-                Producto producto = cc.ToList()[i];
+                pedido.Producto.Add(carritoToShow[i]);
+            }
+            db.Pedidos.Add(pedido);
+            db.SaveChanges();
+            return View("Home");
+        }
+
+        private CarritoCompra toShow(CarritoCompra cc)
+        {
+            Dictionary<int, int> typeIdAmount = new Dictionary<int, int>();
+            for (int i = 0; i < cc.Count; i++)
+            {
+                Producto producto = cc[i];
                 try
                 {
                     int newAmount = typeIdAmount[producto.Id] + 1;
@@ -34,13 +53,18 @@ namespace TiendaVirtual.Controllers
 
             }
             CarritoCompra carritoToShow = new CarritoCompra();
-            foreach(KeyValuePair<int, int> idAmount in typeIdAmount)
+            foreach (KeyValuePair<int, int> idAmount in typeIdAmount)
             {
                 Producto producto = db.Productos.Find(idAmount.Key);
-                producto.Cantidad = idAmount.Value;
-                carritoToShow.Add(producto);
+                Producto newProducto = new Producto();
+                newProducto.Id = producto.Id;
+                newProducto.Descripcion = producto.Descripcion;
+                newProducto.Cantidad = idAmount.Value;
+                newProducto.Nombre = producto.Nombre;
+                newProducto.Precio = producto.Precio;
+                carritoToShow.Add(newProducto);
             }
-            return View(carritoToShow);
+            return carritoToShow;
         }
 
         // GET: CarritoCompra/Details/5
