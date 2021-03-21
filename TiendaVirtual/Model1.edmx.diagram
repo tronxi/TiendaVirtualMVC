@@ -6,8 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="b23afea8d2ba4797a08ec2d2dca0c1a5" Name="Diagram1" >
         <EntityTypeShape EntityType="Model1.Producto" Width="1.5" PointX="3.625" PointY="0.5" />
-        <EntityTypeShape EntityType="Model1.Pedido" Width="1.5" PointX="7.125" PointY="0.75" />
-        <AssociationConnector Association="Model1.ProductoPedido" />
+        <EntityTypeShape EntityType="Model1.Pedido" Width="1.5" PointX="8" PointY="0.5" />
+        <EntityTypeShape EntityType="Model1.ProductoPedido" Width="1.5" PointX="5.75" PointY="0.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

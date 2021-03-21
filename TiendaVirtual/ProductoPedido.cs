@@ -12,12 +12,11 @@ namespace TiendaVirtual
     using System;
     using System.Collections.Generic;
     
-    public partial class Producto
+    public partial class ProductoPedido
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int IdPedido { get; set; }
+        public int IdProducto { get; set; }
         public int Cantidad { get; set; }
-        public string Descripcion { get; set; }
-        public double Precio { get; set; }
     }
 }

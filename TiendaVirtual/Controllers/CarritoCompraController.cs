@@ -23,16 +23,39 @@ namespace TiendaVirtual.Controllers
 
         public ActionResult comprar(CarritoCompra cc)
         {
-            CarritoCompra carritoToShow = toShow(cc);
             Pedido pedido = new Pedido();
             pedido.Nombre = User.Identity.Name;
-            for (int i = 0; i < carritoToShow.ToList().Count; i++)
-            {
-                pedido.Producto.Add(carritoToShow[i]);
-            }
             db.Pedidos.Add(pedido);
             db.SaveChanges();
-            return View("Home");
+
+            Dictionary<int, int> typeIdAmount = new Dictionary<int, int>();
+            for (int i = 0; i < cc.Count; i++)
+            {
+                Producto producto = cc[i];
+                try
+                {
+                    int newAmount = typeIdAmount[producto.Id] + 1;
+                    typeIdAmount[producto.Id] = newAmount;
+                }
+                catch (Exception e)
+                {
+                    typeIdAmount.Add(producto.Id, 1);
+                }
+
+            }
+            CarritoCompra carritoToShow = new CarritoCompra();
+            foreach (KeyValuePair<int, int> idAmount in typeIdAmount)
+            {
+                ProductoPedido productoPedido = new ProductoPedido();
+                productoPedido.IdPedido = pedido.Id;
+                productoPedido.IdProducto = idAmount.Key;
+                productoPedido.Cantidad = idAmount.Value;
+                db.ProductoPedidoSet.Add(productoPedido);
+                db.SaveChanges();
+            }
+            cc.Clear();
+            //return View(toShow(cc));
+            return RedirectToAction("/Index");
         }
 
         private CarritoCompra toShow(CarritoCompra cc)
@@ -56,13 +79,8 @@ namespace TiendaVirtual.Controllers
             foreach (KeyValuePair<int, int> idAmount in typeIdAmount)
             {
                 Producto producto = db.Productos.Find(idAmount.Key);
-                Producto newProducto = new Producto();
-                newProducto.Id = producto.Id;
-                newProducto.Descripcion = producto.Descripcion;
-                newProducto.Cantidad = idAmount.Value;
-                newProducto.Nombre = producto.Nombre;
-                newProducto.Precio = producto.Precio;
-                carritoToShow.Add(newProducto);
+                producto.Cantidad = idAmount.Value;
+                carritoToShow.Add(producto);
             }
             return carritoToShow;
         }
