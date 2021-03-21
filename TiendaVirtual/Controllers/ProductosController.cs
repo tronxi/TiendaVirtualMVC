@@ -53,6 +53,10 @@ namespace TiendaVirtual.Controllers
         // GET: Productos/Create
         public ActionResult Create()
         {
+            if(!User.IsInRole("admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             return View();
         }
 
@@ -76,6 +80,10 @@ namespace TiendaVirtual.Controllers
         // GET: Productos/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -95,6 +103,10 @@ namespace TiendaVirtual.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Nombre,Cantidad,Descripcion,Precio")] Producto producto)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(producto).State = EntityState.Modified;
@@ -107,6 +119,10 @@ namespace TiendaVirtual.Controllers
         // GET: Productos/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -124,6 +140,10 @@ namespace TiendaVirtual.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!User.IsInRole("admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
             Producto producto = db.Productos.Find(id);
             db.Productos.Remove(producto);
             db.SaveChanges();

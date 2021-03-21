@@ -55,7 +55,7 @@ namespace TiendaVirtual.Controllers
             }
             cc.Clear();
             //return View(toShow(cc));
-            return RedirectToAction("/Index");
+            return RedirectToAction("Index", "Home");
         }
 
         private CarritoCompra toShow(CarritoCompra cc)
