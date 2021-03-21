@@ -208,7 +208,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CarritoCompra.cs" />
     <Compile Include="Models\CarritoCompraModelBinder.cs" />
-    <Compile Include="Models\AddToCart.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Pedido.cs">
