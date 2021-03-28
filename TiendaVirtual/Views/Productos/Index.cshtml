@@ -52,11 +52,15 @@
                 @Html.ActionLink("Details", "Details", new { id = item.Id })
                 @if (item.Cantidad > 0)
                 {
-                    <span>|</span>
-                    @Html.ActionLink("Add to Cart", "addCart", new { id = item.Id })
-                    // var val = @Html.TextBoxFor(a => a);
+                    using(Html.BeginForm("addCart", "Productos"))
+                    {
+                        <div>
+                            <input type="hidden" value="@item.Id" id="id", name="id"/>
+                            <input type=number min="0", max="@item.Cantidad" id="amount" name="amount"/>
+                            <input type="submit" id="add" value="Add" />
+                        </div>
+                    }
                 }
-
                 else
                 {
                     <span>Producto agotado</span>

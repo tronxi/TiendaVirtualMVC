@@ -54,7 +54,38 @@ namespace TiendaVirtual.Controllers
                 db.SaveChanges();
             }
             cc.Clear();
-            //return View(toShow(cc));
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult descartar(CarritoCompra cc)
+        {
+            Pedido pedido = new Pedido();
+            pedido.Nombre = User.Identity.Name;
+            db.Pedidos.Add(pedido);
+            db.SaveChanges();
+
+            Dictionary<int, int> typeIdAmount = new Dictionary<int, int>();
+            for (int i = 0; i < cc.Count; i++)
+            {
+                Producto producto = cc[i];
+                try
+                {
+                    int newAmount = typeIdAmount[producto.Id] + 1;
+                    typeIdAmount[producto.Id] = newAmount;
+                }
+                catch (Exception e)
+                {
+                    typeIdAmount.Add(producto.Id, 1);
+                }
+
+            }
+            foreach (KeyValuePair<int, int> idAmount in typeIdAmount)
+            {
+                Producto producto = db.Productos.Find(idAmount.Key);
+                producto.Cantidad += idAmount.Value;
+                db.SaveChanges();
+            }
+            cc.Clear();
             return RedirectToAction("Index", "Home");
         }
 

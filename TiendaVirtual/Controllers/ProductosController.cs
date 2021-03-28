@@ -15,13 +15,16 @@ namespace TiendaVirtual.Controllers
     {
         private Model1Container db = new Model1Container();
 
-        public ActionResult addCart(int id, CarritoCompra cc)
+        public ActionResult addCart(int id, int amount, CarritoCompra cc)
         {
             Producto producto = db.Productos.Find(id);
-            if (producto.Cantidad > 0)
+            if (producto.Cantidad >= amount)
             {
-                cc.Add(producto);
-                producto.Cantidad--;
+                for(int i = 0; i < amount; i ++)
+                {
+                    cc.Add(producto);
+                    producto.Cantidad--;
+                }
                 db.SaveChanges();
             }
 
